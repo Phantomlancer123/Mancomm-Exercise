@@ -8,18 +8,19 @@ if (!url) {
   process.exit(1);
 }
 
-axios.get(url)
-  .then(response => {
+(async () => {
+  try {
+    const response = await axios.get(url);
     const html = response.data;
     const $ = cheerio.load(html);
-    console.log($);
+
     const json = parseHtmlToJson($);
     fs.writeFileSync('output.json', JSON.stringify(json, null, 2));
     console.log('JSON file created successfully.');
-  })
-  .catch(error => {
+  } catch (error) {
     console.error('Error fetching or parsing the HTML:', error);
-  });
+  }
+})();
 
 function parseHtmlToJson($) {
     return $;
